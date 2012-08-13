@@ -6,7 +6,7 @@ define(function(require) {
 	return Base.extend('Pool', {
 
 		init: function init(deps, Type) {
-			this.base();
+			this.base(deps);
 			this._stack = [];
 			this._Type = Type;
 		},
@@ -30,6 +30,18 @@ define(function(require) {
 				return obj.dispose();
 
 			this._stack.push(obj);
+		},
+
+		getProto: function() {
+			return this._Type.getProto();
+		},
+
+		isTypeOf: function(target) {
+			return this._Type.isTypeOf(target);
+		},
+
+		include: function(config) {
+			return this._Type.include(config);
 		},
 
 		toString: function toString() {

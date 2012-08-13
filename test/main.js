@@ -29,16 +29,14 @@ require([ 'mocha' ], function() {
 
 	mocha.setup("bdd");
 
-	require([
-		'test/core/polyfill.spec',
-		//'test/core/base.spec',
-		/*
-		'test/core/lang.spec',
-		'test/core/pool.spec',
-		'test/core/emitter.spec',
-		'test/core/memitter.spec',
-		*/
-	], function() {
-		mocha.run();
-	});
+	// require([
+	// 	'test/core/polyfill.spec',
+	// 	'test/core/base.spec',
+	// 	'test/core/lang.spec',
+	// 	'test/core/pool.spec',
+	// 	'test/core/emitter.spec',
+	// 	'test/core/emitter_mixin.spec'
+	// ], function() {
+	// 	mocha.run();
+	// });
 });

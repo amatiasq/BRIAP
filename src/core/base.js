@@ -1,6 +1,7 @@
 define(function(require) {
 	"use strict";
 
+	require('core/lang');
 	var _ = require('Underscore');
 
 
@@ -30,8 +31,10 @@ define(function(require) {
 
 	function extend(name, config) {
 
-		if (arguments.length === 1)
+		if (arguments.length === 1) {
 			config = name;
+			name = null;
+		}
 
 		function ctor() { }
 		var parent = dummy.prototype = this.getProto();
@@ -42,8 +45,6 @@ define(function(require) {
 		var Type = proto.type = {
 
 			name: name || 'Anonymous Type',
-
-			parent: parent,
 
 			extend: extend,
 
