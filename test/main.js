@@ -39,14 +39,12 @@ require([ 'mocha' ], function() {
 	require([
 		/// LEVEL 0 ///
 		//'test/core/polyfill.spec',
-		/*
 		'test/core/tools.spec',
 		'test/core/lang.spec',
 
 		/// LEVEL 1 ///
 		'test/core/base.spec',
-		*/
-		'test/core/callable.spec',/*
+		'test/core/callable.spec',
 
 		/// LEVEL 2 ///
 		'test/core/emitter.spec',
@@ -55,8 +53,7 @@ require([ 'mocha' ], function() {
 		/// LEVEL 3 ///
 		'test/core/pool.spec',
 		'test/core/scheduled.spec',
-		*/
-		//'test/core/promise.spec',
+		'test/core/promise.spec',
 	], function() {
 		console.profile("Testing..." + Date.now());
 		mocha.run(function() {
