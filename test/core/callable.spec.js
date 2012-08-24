@@ -35,6 +35,12 @@ define(function(require) {
 				sut(arg1, arg2, arg3);
 				mock.verify();
 			});
+
+			it('should return the value returned by execute method', function() {
+				var value = {};
+				sinon.stub(sut, 'execute').returns(value);
+				expect(sut()).toBe(value);
+			});
 		});
 	}
 

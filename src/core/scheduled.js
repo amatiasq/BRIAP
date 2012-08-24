@@ -1,3 +1,12 @@
+/*
+
+interface Scheduled extends Callable {
+	void flush();
+	void cancel();
+}
+
+*/
+
 define(function(require) {
 	"use strict";
 

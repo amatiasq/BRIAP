@@ -10,8 +10,10 @@ define(function(require) {
 			sut = Promise.create();
 		});
 
-		describe('#onComplete', function() {
+		describe('#getFuture method', function() {
+			it('should return a object with Future interface', function() {
 
+			})
 		})
 
 	});

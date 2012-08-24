@@ -1,3 +1,11 @@
+/*
+
+interface Pool<T> implements Type<T> extends Base {
+
+}
+
+*/
+
 define(function(require) {
 	"use strict";
 

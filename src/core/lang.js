@@ -1,3 +1,9 @@
+/*
+
+bool is(Object value, Object type);
+
+*/
+
 define(function() {
 	"use strict";
 

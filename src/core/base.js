@@ -1,3 +1,22 @@
+/*
+
+interface Type<T> extends Object {
+	String? name;
+	T create(args...);
+	void include(JSON methods);
+	Type extend(JSON methods);
+	String toString();
+}
+
+interface Base extends Object {
+	Type type;
+	self init(JSON dependencies);
+	void dispose();
+	String toString();
+}
+
+*/
+
 define(function(require) {
 	"use strict";
 

@@ -1,3 +1,16 @@
+/*
+
+typedef Object extractor(Object item);
+
+Function compose(Function first, Function second...);
+extractor funct(String name);
+extractor prop(String name);
+Object proto(Object target);
+bool hasOwn(Object target, String property);
+Array args(Arguments argsObject);
+
+*/
+
 define(function(require) {
 	"use strict";
 

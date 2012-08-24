@@ -1,3 +1,12 @@
+/*
+
+mixin EmitterMixin {
+	void on(String signal, void handler(args...), Object scope);
+	void off(String signal, void handler(args...), Object scope);
+}
+
+*/
+
 define(function(require) {
 	"use strict";
 

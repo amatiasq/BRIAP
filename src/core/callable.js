@@ -1,3 +1,11 @@
+/*
+
+interface Callable extends Base {
+	execute(args...);
+}
+
+*/
+
 define(function(require) {
 	"use strict";
 
@@ -34,7 +42,7 @@ define(function(require) {
 
 			create: function create() {
 				function callable() {
-					callable.execute.apply(callable, arguments);
+					return callable.execute.apply(callable, arguments);
 				}
 
 				var key;
