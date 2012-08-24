@@ -3,16 +3,25 @@ require.config({
 	baseUrl: '../src',
 
 	paths: {
+		'SystemInternals': '../src/core/lang',
+		'SystemInternalTests': '../test/src/core/lang.spec',
+		'Polyfill': '../lib/es5-shim',
 		'Underscore': '../lib/underscore-require',
+
 		'mocha_adapter': '../lib/test/mocha_adapter',
 		'expect': '../lib/test/expect',
 		'expect-sinon': '../lib/test/expectSinon',
 		'sinon': '../lib/test/sinon-1.3.4',
 		'mocha': '../lib/test/mocha',
+
 		'test': '../test'
 	},
 
 	shim: {
+		'SystemInternals': {
+			deps: [ 'Polyfill' ]
+		},
+
 		'mocha': {
 			deps: [ 'expect', 'sinon', 'mocha_adapter' ]
 		},

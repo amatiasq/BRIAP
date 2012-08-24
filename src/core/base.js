@@ -20,8 +20,7 @@ interface Base extends Object {
 define(function(require) {
 	"use strict";
 
-	require('core/polyfill');
-	require('core/lang');
+	require('SystemInternals');
 	var _ = require('Underscore');
 
 

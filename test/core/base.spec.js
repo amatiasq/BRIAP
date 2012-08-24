@@ -1,7 +1,7 @@
 define(function(require) {
 	"use strict";
 
-	var LangSpec = require('test/core/lang.spec');
+	require('SystemInternalTests');
 	var Lang = require('core/lang');
 	var Base = require('core/base');
 
