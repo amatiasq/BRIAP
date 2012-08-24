@@ -3,7 +3,9 @@ define(function(require) {
 
 	var Base = require('core/base');
 
-	var Emitter = Base.extend('Emitter', {
+	return Base.extend({
+
+		name: 'Emitter',
 
 		init: function init(dependencies) {
 			this.base(dependencies);
@@ -49,6 +51,4 @@ define(function(require) {
 			});
 		}
 	});
-
-	return Emitter;
 });

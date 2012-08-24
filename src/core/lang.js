@@ -1,5 +1,6 @@
 define(function() {
 	"use strict";
+
 	var undefined;
 
 	function addNative(type, name) {

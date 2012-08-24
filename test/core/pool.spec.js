@@ -5,7 +5,7 @@ define(function(require) {
 	var Base = require('core/base');
 	var Pool = require('core/pool');
 
-	describe('Pool class', function() {
+	describe('Pool type', function() {
 
 		var sut;
 		var SampleClass;

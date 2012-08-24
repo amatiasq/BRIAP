@@ -3,7 +3,9 @@ define(function(require) {
 
 	var Base = require('core/base');
 
-	return Base.extend('Pool', {
+	return Base.extend({
+
+		name: 'Pool',
 
 		init: function init(deps, Type) {
 			this.base(deps);

@@ -27,16 +27,80 @@ require.config({
 
 require([ 'mocha' ], function() {
 
-	mocha.setup("bdd");
 
-	// require([
-	// 	'test/core/polyfill.spec',
-	// 	'test/core/base.spec',
-	// 	'test/core/lang.spec',
-	// 	'test/core/pool.spec',
-	// 	'test/core/emitter.spec',
-	// 	'test/core/emitter_mixin.spec'
-	// ], function() {
-	// 	mocha.run();
-	// });
+	function select(selector) {
+		return Array.prototype.slice.call(document.querySelectorAll(selector));
+	}
+
+	function hideSuccess() {
+		select('#mocha .suite').concat(select('#mocha .test')).forEach(function(el) { el.style.display = 'none'; });
+
+		select('#mocha .fail').forEach(function(current) {
+			current.style.display = 'block';
+			while (current.parentNode) {
+				current = current.parentNode;
+				if (current.className && current.className === 'suite')
+					current.className += " suiteFail";
+			}
+		});
+		select('#mocha .suiteFail').forEach(function(el) { el.style.display = 'block'; });
+	}
+
+	mocha.setup({
+		ui: "bdd",
+		globals: [
+			'setTimeout',
+			'setInterval',
+			'clearTimeout',
+			'clearInterval'
+		]
+	});
+
+	require([
+		/// LEVEL 0 ///
+		//'test/core/polyfill.spec',
+		'test/core/tools.spec',
+		'test/core/lang.spec',
+
+		/// LEVEL 1 ///
+		'test/core/base.spec',
+		'test/core/callable.spec',
+
+		/// LEVEL 2 ///
+		'test/core/emitter.spec',
+		'test/core/emitter_mixin.spec',
+
+		/// LEVEL 3 ///
+		'test/core/pool.spec',
+		'test/core/scheduled.spec',
+		'test/core/promise.spec',
+	], function() {
+		console.profile("Testing..." + Date.now());
+		mocha.run(function() {
+			console.profileEnd();
+			hideSuccess();
+		});
+	});
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

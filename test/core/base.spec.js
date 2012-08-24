@@ -1,6 +1,7 @@
 define(function(require) {
 	"use strict";
 
+	var LangSpec = require('test/core/lang.spec');
 	var Lang = require('core/lang');
 	var Base = require('core/base');
 
@@ -35,7 +36,7 @@ define(function(require) {
 			it('should call object\'s #dispose method', function() {
 				var mock = sinon.mock(sut).expects('dispose').once();
 				Type.destruct(sut);
-				mock.verify();
+				mock.verify()
 			});
 
 			it('only if the $$alive property is true', function() {
@@ -59,14 +60,14 @@ define(function(require) {
 			it('should call the static destruct method ', function() {
 				var mock = sinon.mock(Type).expects('destruct').once();
 				sut.dispose();
-				mock.verify();
 				Type.destruct.restore();
+				mock.verify();
 			});
 
 		});
 	}
 
-	function test(Type) {
+	function BaseSpec(Type) {
 
 		testType(Type);
 
@@ -167,8 +168,8 @@ define(function(require) {
 		});
 	}
 
-	describe('Base class', function() {
-		test(Base);
+	describe('Base type', function() {
+		BaseSpec(Base);
 	});
-	return test;
+	return BaseSpec;
 });

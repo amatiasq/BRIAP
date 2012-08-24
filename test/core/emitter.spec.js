@@ -2,11 +2,11 @@ define(function(require) {
 	"use strict";
 
 	var Emitter = require('core/emitter');
-	var BaseSpecs = require('test/core/base.spec');
+	var BaseSpec = require('test/core/base.spec');
 
-	describe('Emitter class', function() {
+	describe('Emitter type', function() {
 
-		BaseSpecs(Emitter);
+		BaseSpec(Emitter);
 
 		var sampleEvent = 'dummy';
 		var anotherEvent = 'another';

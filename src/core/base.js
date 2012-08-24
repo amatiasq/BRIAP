@@ -1,6 +1,7 @@
 define(function(require) {
 	"use strict";
 
+	require('core/polyfill');
 	require('core/lang');
 	var _ = require('Underscore');
 
@@ -8,7 +9,7 @@ define(function(require) {
 	function dummy() { };
 
 	function useBase(method, parent, name) {
-		return function() {
+		return function base() {
 			var result, original = this.base;
 			this.base = parent;
 			// DEBUG INTO HERE!!!
@@ -28,24 +29,24 @@ define(function(require) {
 		});
 	}
 
+	_.mixin({ useBase: inject });
 
-	function extend(name, config) {
 
-		if (arguments.length === 1) {
-			config = name;
-			name = null;
-		}
-
+	function extend(config) {
 		function ctor() { }
 		var parent = dummy.prototype = this.getProto();
 		var proto = ctor.prototype = new dummy;
+		var name = 'Anonymous Type';
 
-		inject(proto, config);
+		if (config) {
+			if (config.hasOwnProperty('name'))
+				name = config.name;
+			_.useBase(proto, config);
+		}
 
 		var Type = proto.type = {
 
-			name: name || 'Anonymous Type',
-
+			name: name,
 			extend: extend,
 
 			create: function create() {
@@ -68,10 +69,10 @@ define(function(require) {
 			},
 
 			include: function include(config) {
-				inject(proto, config);
+				_.useBase(proto, config);
 			},
 
-			toString: function() {
+			toString: function toString() {
 				return '[type ' + this.name + ']';
 			}
 
@@ -89,9 +90,10 @@ define(function(require) {
 			return {};
 		}
 
-	}, 'Base', {
+	}, {
 
 		type: null,
+		name: 'Base',
 
 		init: function init(dependencies) {
 			this.$$hash = count++;
@@ -106,7 +108,7 @@ define(function(require) {
 			this.type.destruct(this);
 		},
 
-		toString: function() {
+		toString: function toString() {
 			return this.type.toString() + '{ hash: ' + this.$$hash + ' }';
 		}
 
