@@ -4,11 +4,22 @@ define(function(require) {
 	var tools = require('core/tools');
 	var Lang = require('core/lang');
 	var Base = require('core/base');
+	var Error = require('core/error');
 	var Schedule = require('core/schedule');
 	var Emitter = require('core/emitter');
 
 	var funct = tools.funct;
 	var schedule = Schedule.create();
+
+	var PromiseError = Error.extend({
+		name: 'PromiseError',
+
+		init: function(error, index) {
+			this.base(error.message);
+			this.original = error;
+			this.index = index;
+		}
+	});
 
 	var Future = Base.extend({
 
@@ -170,14 +181,7 @@ define(function(require) {
 					promise.fulfill.apply(promise, values);
 			}, function(error) {
 				// TODO: create promise error
-				promise.fail({
-					getError: function() {
-						return error;
-					},
-					getIndex: function() {
-						return index;
-					}
-				});
+				promise.fail(PromiseError.create(error, index));
 			});
 		});
 
@@ -208,14 +212,7 @@ define(function(require) {
 		value.then(function() {
 			next(stack, scope, index, promise, stack[index].apply(scope, arguments));
 		}, function(error) {
-			promise.fail({
-				getError: function() {
-					return error;
-				},
-				getIndex: function() {
-					return index;
-				}
-			});
+			promise.fail(PromiseError.create(error, index));
 		});
 	}
 

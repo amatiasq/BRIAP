@@ -17,7 +17,8 @@ define(function(require) {
 	function getAllKeys(map) {
 		var result = [];
 		for (var i in map)
-			result.push(i);
+			if (i !== 'name')
+				result.push(i);
 		return result;
 	}
 

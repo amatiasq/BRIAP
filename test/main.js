@@ -3,8 +3,8 @@ require.config({
 	baseUrl: '../src',
 
 	paths: {
-		'SystemInternals': '../src/core/lang',
-		'SystemInternalTests': '../test/src/core/lang.spec',
+		'SystemInternals': '../lib/dummy/m1',
+		'SystemInternalTests': '../lib/dummy/m2',
 		'Polyfill': '../lib/es5-shim',
 		'Underscore': '../lib/underscore-require',
 
@@ -19,6 +19,12 @@ require.config({
 
 	shim: {
 		'SystemInternals': {
+			deps: [ 'Polyfill', 'core/lang' ]
+		},
+		'SystemInternalTests': {
+			deps: [ 'SystemInternals', 'test/core/lang.spec' ]
+		},
+		'core/lang': {
 			deps: [ 'Polyfill' ]
 		},
 
@@ -47,12 +53,12 @@ require([ 'mocha' ], function() {
 
 	require([
 		/// LEVEL 0 ///
-		//'test/core/polyfill.spec',
 		'test/core/tools.spec',
 		'test/core/lang.spec',
 
 		/// LEVEL 1 ///
 		'test/core/base.spec',
+		'test/core/error.spec',
 		'test/core/callable.spec',
 
 		/// LEVEL 2 ///

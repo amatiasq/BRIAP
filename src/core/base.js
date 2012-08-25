@@ -48,6 +48,13 @@ define(function(require) {
 	}
 
 	_.mixin({ useBase: inject });
+	_.mixin({ extendNative: function(native, config) {
+		return extend.call({
+			getProto: function() {
+				return new native;
+			}
+		}, config);
+	}})
 
 
 	function extend(config) {
@@ -110,15 +117,8 @@ define(function(require) {
 
 	var count = 0;
 
-	return extend.call({
+	return _.extendNative(Object, {
 
-		getProto: function() {
-			return {};
-		}
-
-	}, {
-
-		type: null,
 		name: 'Base',
 
 		init: function init(dependencies) {
