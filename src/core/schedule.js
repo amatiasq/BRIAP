@@ -51,8 +51,10 @@ define(function(require) {
 
 		flush: function() {
 			this.unschedule();
-			this.calls.forEach(callFlush);
-			this.calls.length = 0;
+			var calls = this.calls;
+			this.calls = [];
+
+			calls.forEach(callFlush);
 		}
 	};
 
@@ -90,10 +92,12 @@ define(function(require) {
 			this._scheduled = false;
 			manager.remove(this);
 
-			this._stack.forEach(function(i) {
+			var stack = this._stack;
+			this._stack = [];
+
+			stack.forEach(function(i) {
 				i.action.apply(i.scope, i.args);
 			});
-			this._stack.length = 0;
 		}
 	});
 });

@@ -11,6 +11,7 @@ interface Emitter extends Base {
 define(function(require) {
 	"use strict";
 
+	var args = require('core/tools').args;
 	var Base = require('core/base');
 
 	return Base.extend({
@@ -56,9 +57,22 @@ define(function(require) {
 		},
 
 		emit: function emit(signal) {
-			this._listeners[signal].forEach(function(item) {
-				item.funct.call(item.scope);
-			});
+			var list = this._listeners[signal];
+			if (!list)
+				return;
+
+			if (arguments.length > 1) {
+				var data = args(arguments, 1);
+				var action = function(item) {
+					item.funct.apply(item.scope, data);
+				};
+			} else {
+				var action = function(item) {
+					item.funct.call(item.scope);
+				};
+			}
+
+			list.forEach(action);
 		}
 	});
 });

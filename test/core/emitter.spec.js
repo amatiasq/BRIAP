@@ -33,6 +33,10 @@ define(function(require) {
 			expect(sut.listenersCount(sampleEvent)).toBe(0);
 		});
 
+		it('should not crash if I fire a non-listened signal', function() {
+			sut.emit(anotherEvent)
+		});
+
 		describe('When I add a listener...', function() {
 			var spy;
 
@@ -60,22 +64,31 @@ define(function(require) {
 
 			describe('... and emit it...', function() {
 
-				beforeEach(function() {
-					resetSpy();
-					emit();
-				})
+				beforeEach(resetSpy);
 
 				it('should call a listener binded to a signal when the emit method is called with this signal', function() {
+					emit();
 					expect(spy).called.once();
 				});
 
 				it('should be called with the scope given as the thirth argument for the .on() method', function() {
+					emit();
 					expect(spy).called.on(scope);
 				});
 
 				it('should call the listeners as many times as I call .emit() method', function() {
 					emit();
+					emit();
 					expect(spy).called.twice();
+				});
+
+				it('should pass to the listeners every argument I pass to emit method except the signal name', function() {
+					var arg1 = 42,
+						arg2 = 'asdf',
+						arg3 = {};
+
+					sut.emit(sampleEvent, arg1, arg2, arg3);
+					expect(spy).called.withExactly(arg1, arg2, arg3);
 				});
 			});
 

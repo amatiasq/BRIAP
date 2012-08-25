@@ -73,9 +73,17 @@ define(function(require) {
 				return obj;
 			},
 
-			destruct: function destruct(obj) {
+			destruct: function destruct(obj, props) {
 				if (obj.$$alive)
-					obj.dispose();
+					return obj.dispose();
+
+				if (props) {
+					props.forEach(function(i) {
+						obj[i] = null;
+					});
+				}
+
+				obj.$$alive = false;
 			},
 
 			getProto: function getProto() {
@@ -123,7 +131,21 @@ define(function(require) {
 				return;
 
 			this.$$alive = false;
-			this.type.destruct(this);
+			var props = [];
+
+			for (var i in this) {
+				if (i === 'type')
+					continue;
+
+				if (this[i] &&
+					this[i].dispose &&
+					this[i].$$alive)
+					throw new Error(this.toString() + ' has not disposed its property ' + i);
+
+				props.push(i);
+			}
+
+			this.type.destruct(this, props);
 		},
 
 		toString: function toString() {

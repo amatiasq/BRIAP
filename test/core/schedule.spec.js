@@ -63,6 +63,14 @@ define(function(require) {
 			sut(spy, scope, [ arg1, arg2, arg3 ]);
 			clock.tick(tick);
 			expect(spy).called.withExactly(arg1, arg2, arg3);
-		})
+		});
+
+		it('should work if inside a callback I schedule again', function() {
+			sut(function() {
+				sut(spy);
+			});
+			clock.tick(tick);
+			expect(spy).called.once();
+		});
 	});
 });

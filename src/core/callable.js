@@ -58,7 +58,7 @@ define(function(require) {
 
 			destruct: function destruct(obj) {
 				if (obj.$$alive)
-					obj.dispose();
+					return obj.dispose();
 			},
 
 			getProto: function getProto() {
