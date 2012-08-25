@@ -1,8 +1,8 @@
 /*
 
-interface Scheduled extends Callable {
+interface Schedule extends Callable {
+	void execute(Function action [, Object scope [, Array args]]);
 	void flush();
-	void cancel();
 }
 
 */
@@ -10,13 +10,11 @@ interface Scheduled extends Callable {
 define(function(require) {
 	"use strict";
 
-	function funct(name) {
-		return function(obj) {
-			obj[name]();
-		};
-	}
-
 	var Callable = require('core/callable');
+
+	function callFlush(obj) {
+		return obj.flush();
+	}
 
 	var manager = {
 
@@ -53,7 +51,7 @@ define(function(require) {
 
 		flush: function() {
 			this.unschedule();
-			this.calls.forEach(funct('flush'));
+			this.calls.forEach(callFlush);
 			this.calls.length = 0;
 		}
 	};
@@ -61,21 +59,26 @@ define(function(require) {
 	manager.flush = manager.flush.bind(manager);
 
 	return Callable.extend({
-		name: 'Scheduled',
+		name: 'Schedule',
 
-		init: function(deps, action, scope) {
+		init: function(deps) {
 			this.base(deps);
 			this._scheduled = false;
-			this._action = action;
-			this._scope = scope;
+			this._stack = [];
 		},
 
 		dispose: function() {
-			this.cancel();
+			this._stack = null;
 			this.base();
 		},
 
-		execute: function() {
+		execute: function(action, scope, args) {
+			this._stack.push({
+				action: action,
+				scope: scope,
+				args: args
+			});
+
 			if (this._scheduled)
 				return;
 
@@ -85,15 +88,12 @@ define(function(require) {
 
 		flush: function() {
 			this._scheduled = false;
-			this._action();
-		},
-
-		cancel: function() {
-			if (!this._scheduled)
-				return;
-
 			manager.remove(this);
-			this._scheduled = false;
+
+			this._stack.forEach(function(i) {
+				i.action.apply(i.scope, i.args);
+			});
+			this._stack.length = 0;
 		}
 	});
 });

@@ -61,19 +61,20 @@ require([ 'mocha' ], function() {
 
 		/// LEVEL 3 ///
 		'test/core/pool.spec',
-		'test/core/scheduled.spec',
+		'test/core/schedule.spec',
 		'test/core/promise.spec',
 	], function() {
-		console.profile("Testing..." + Date.now());
+		//console.profile("Testing..." + Date.now());
 		mocha.run(function() {
-			console.profileEnd();
+			//console.profileEnd();
 			hideSuccess();
 
-			function select(selector) {
-				return Array.prototype.slice.call(document.querySelectorAll(selector));
-			}
 
 			function hideSuccess() {
+				function select(selector) {
+					return Array.prototype.slice.call(document.querySelectorAll(selector));
+				}
+
 				select('#mocha .suite').concat(select('#mocha .test')).forEach(function(el) { el.style.display = 'none'; });
 
 				select('#mocha .fail').forEach(function(current) {
@@ -86,7 +87,6 @@ require([ 'mocha' ], function() {
 				});
 				select('#mocha .suiteFail').forEach(function(el) { el.style.display = 'block'; });
 			}
-
 		});
 	});
 });
