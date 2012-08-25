@@ -69,6 +69,9 @@ require([ 'mocha' ], function() {
 		'test/core/pool.spec',
 		'test/core/schedule.spec',
 		'test/core/promise.spec',
+
+		/// LEVEL 4 ///
+		'test/dom/element.spec',
 	], function() {
 		//console.profile("Testing..." + Date.now());
 		mocha.run(function() {

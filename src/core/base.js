@@ -10,7 +10,7 @@ interface Type<T> extends Object {
 
 interface Base extends Object {
 	Type type;
-	self init(JSON dependencies);
+	void init(JSON dependencies);
 	void dispose();
 	String toString();
 }

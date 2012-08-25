@@ -14,6 +14,8 @@ Array args(Arguments argsObject);
 define(function(require) {
 	"use strict";
 
+	var _ = require('Underscore');
+
 	function empty() { };
 	var has = Object.prototype.hasOwnProperty
 	var slice = Array.prototype.slice;
@@ -82,6 +84,8 @@ define(function(require) {
 
 
 	return {
+		each: _.each,
+
 		compose: compose,
 		funct: funct,
 		prop: prop,

@@ -1,11 +1,14 @@
 define(function(require) {
 	"use strict";
 
+	var BaseSpec = require('test/core/base.spec');
 	var Lang = require('core/lang');
 	var Base = require('core/base');
 	var Pool = require('core/pool');
 
 	describe('Pool type', function() {
+
+		BaseSpec(Pool);
 
 		var sut;
 		var SampleClass;

@@ -55,7 +55,8 @@ define(function(require) {
 		},
 
 		toString: function toString() {
-			return '[pool ' + this._Type.name + ']';
+			var name = (this._Type && this._Type.name) || 'None'
+			return '[pool ' + name + ']';
 		}
 
 	});

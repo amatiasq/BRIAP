@@ -15,7 +15,7 @@ define(function(require) {
 		name: 'PromiseError',
 
 		init: function(error, index) {
-			this.base(error.message);
+			this.base(error && error.message);
 			this.original = error;
 			this.index = index;
 		}
