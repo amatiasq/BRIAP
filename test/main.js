@@ -1,7 +1,7 @@
 // This is key!
 
 var profile = false;
-var coverage = true;
+var coverage = false;
 
 require.config({
 	baseUrl: coverage ? '../src-cov' : '../src',

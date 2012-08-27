@@ -1,0 +1,24 @@
+19,22c19
+<
+---
+> var spawn = require('child_process').spawn
+104c61,64
+< 	onFileChanged: function(filepath){
+---
+>     onFileChanged: function(filepath){
+> 		if (filepath.indexOf('-cov') !== -1)
+> 			return;
+>
+127,130c94,100
+< 	startTests: function(){
+<         this.runners.forEach(function(runner){
+<             runner.startTests()
+<         })
+---
+>     startTests: function(){
+> 		var self = this;
+> 		spawn('rm', ['-r', 'src-cov']).on('exit', function(code) {
+> 			spawn('jscoverage', ['src', 'src-cov']).on('exit', function(code) {
+>     	    	self.server.startTests()
+> 			});
+> 		});
