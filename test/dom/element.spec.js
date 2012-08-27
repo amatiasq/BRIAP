@@ -60,7 +60,7 @@ define(function(require) {
 			sut.dom().parentNode = other.dom();
 			// HACK: We should trust the argument is what we expect,
 			//		the browsers crashes when we try to test it.
-			testDelegate(sut, 'deattach', [], other.dom(), 'removeChild', [], true);//, sut.dom());
+			testDelegate(sut, 'deattach', [], other.dom(), 'removeChild', [], true); //[sut.dom()]);
 		});
 
 		it('should delegate #setAttribute method into elements #setAttribute method', function() {

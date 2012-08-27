@@ -142,14 +142,14 @@ body {
   -webkit-box-shadow: 0 1px 3px #eee;
 }
 
-#error {
+#mocha #error {
   color: #c00;
   font-size: 1.5  em;
   font-weight: 100;
   letter-spacing: 1px;
 }
 
-#stats {
+#mocha #stats {
   position: fixed;
   top: 15px;
   right: 10px;
@@ -158,24 +158,24 @@ body {
   color: #888;
 }
 
-#stats .progress {
+#mocha #stats .progress {
   float: right;
   padding-top: 0;
 }
 
-#stats em {
+#mocha #stats em {
   color: black;
 }
 
-#stats li {
+#mocha #stats li {
   display: inline-block;
   margin: 0 5px;
   list-style: none;
   padding-top: 11px;
 }
 
-code .comment { color: #ddd }
-code .init { color: #2F6FAD }
-code .string { color: #5890AD }
-code .keyword { color: #8A6343 }
-code .number { color: #2F6FAD }
+#mocha code .comment { color: #ddd }
+#mocha code .init { color: #2F6FAD }
+#mocha code .string { color: #5890AD }
+#mocha code .keyword { color: #8A6343 }
+#mocha code .number { color: #2F6FAD }

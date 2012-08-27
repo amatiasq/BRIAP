@@ -1,6 +1,10 @@
 // This is key!
+
+var profile = false;
+var coverage = true;
+
 require.config({
-	baseUrl: '../src',
+	baseUrl: coverage ? '../src-cov' : '../src',
 
 	paths: {
 		'SystemInternals': '../lib/dummy/m1',
@@ -73,29 +77,15 @@ require([ 'mocha' ], function() {
 		/// LEVEL 4 ///
 		'test/dom/element.spec',
 	], function() {
-		//console.profile("Testing..." + Date.now());
+
+		if (profile)
+			console.profile("Testing..." + Date.now())
 		mocha.run(function() {
-			//console.profileEnd();
-			hideSuccess();
+			if (profile)
+				console.profileEnd();
 
-
-			function hideSuccess() {
-				function select(selector) {
-					return Array.prototype.slice.call(document.querySelectorAll(selector));
-				}
-
-				select('#mocha .suite').concat(select('#mocha .test')).forEach(function(el) { el.style.display = 'none'; });
-
-				select('#mocha .fail').forEach(function(current) {
-					current.style.display = 'block';
-					while (current.parentNode) {
-						current = current.parentNode;
-						if (current.className && current.className === 'suite')
-							current.className += " suiteFail";
-					}
-				});
-				select('#mocha .suiteFail').forEach(function(el) { el.style.display = 'block'; });
-			}
+			if (!hideMochaSuccess() && coverage)
+				htmlcov();
 		});
 	});
 });
