@@ -15,8 +15,8 @@ define(function(require) {
 
 		type: ErrorType,
 
-		init: function(message) {
-			this.base();
+		init: function(deps, message) {
+			this.base(deps);
 			this.description = this.message = message;
 		}
 	});

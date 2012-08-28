@@ -1,4 +1,5 @@
 define(function(require) {
+	"use strict";
 
 	var BaseSpec = require('test/core/base.spec');
 	var Element = require('dom/element');
@@ -27,7 +28,7 @@ define(function(require) {
 		BaseSpec(Type);
 
 		function createSut() {
-			return Type.create(null, fakeDomElement())
+			return Type.create(fakeDomElement())
 		}
 
 		function testDelegate(target, method, args, delegate, delegatedMethod, expectedArgs, skip) {

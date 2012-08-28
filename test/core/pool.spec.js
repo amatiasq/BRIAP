@@ -14,16 +14,12 @@ define(function(require) {
 		var SampleClass;
 		var instance;
 
-		function reset() {
+		beforeEach(function() {
 			SampleClass = Base.extend();
-			sut = Pool.create(null, SampleClass);
-		}
-
-		beforeEach(reset);
+			sut = Pool.create(SampleClass);
+		});
 
 		describe('#create method', function() {
-
-			beforeEach(reset);
 
 			it('should return a instance the pool\'s class', function() {
 				expect(Lang.is(sut.create(), SampleClass)).toBeTrue();
@@ -54,9 +50,49 @@ define(function(require) {
 				var arg3 = {};
 
 				var mock = sinon.mock(SampleClass.getProto());
-				mock.expects('init').once().withExactArgs(arg1, arg2, arg3);
+				mock.expects('init').once().withExactArgs(null, arg1, arg2, arg3);
 
 				sut.create(arg1, arg2, arg3);
+
+				mock.verify();
+			});
+		});
+
+		describe('#createWithDependencies method', function() {
+
+			it('should return a instance the pool\'s class', function() {
+				expect(Lang.is(sut.createWithDependencies(null), SampleClass)).toBeTrue();
+			});
+
+			it('should return a different instance on each sequential call', function() {
+				expect(sut.createWithDependencies(null)).not.toBe(sut.create());
+			});
+
+			it('should call instance\'s init method', function() {
+				var called = false;
+				SampleClass.include({
+					init:function() {
+						this.initialized = true;
+						called = true;
+					}
+				});
+
+				var instance = sut.createWithDependencies(null)
+
+				expect(called).toBeTrue();
+				expect(instance.initialized).toBeTrue();
+			});
+
+			it('should pass every argument to the object\'s #init method', function() {
+				var deps = {};
+				var arg1 = 1;
+				var arg2 = function() {};
+				var arg3 = {};
+
+				var mock = sinon.mock(SampleClass.getProto());
+				mock.expects('init').once().withExactArgs(deps, arg1, arg2, arg3);
+
+				sut.createWithDependencies(deps, arg1, arg2, arg3);
 
 				mock.verify();
 			});
@@ -65,7 +101,6 @@ define(function(require) {
 		describe('#destruct method', function() {
 
 			beforeEach(function() {
-				reset();
 				instance = sut.create();
 			});
 
@@ -78,8 +113,6 @@ define(function(require) {
 		});
 
 		describe('#destruct - #create combination', function() {
-
-			beforeEach(reset);
 
 			it('should #destruct save this instance to return it the next time I call #create method', function() {
 				var instance = sut.create();

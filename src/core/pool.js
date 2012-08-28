@@ -21,18 +21,26 @@ define(function(require) {
 			this._Type = Type;
 		},
 
-		create: function create() {
+		_get: function(method, args) {
 			var instance;
 
 			if (!this._stack.length) {
-				instance = this._Type.create.apply(this._Type, arguments);
+				instance = this._Type[method].apply(this._Type, args);
 			} else {
 				instance = this._stack.pop();
-				instance.init.apply(instance, arguments);
+				instance.init.apply(instance, args);
 			}
 
 			instance.type = this;
 			return instance;
+		},
+
+		create: function create() {
+			return this._get('create', arguments);
+		},
+
+		createWithDependencies: function createWithDependencies() {
+			return this._get('createWithDependencies', arguments);
 		},
 
 		destruct: function destruct(obj) {

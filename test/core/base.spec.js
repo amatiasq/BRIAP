@@ -27,6 +27,8 @@ define(function(require) {
 			it('should call object\'s #init method who sets $$alive property to true', function() {
 				expect(sut.$$alive).toBeTrue();
 			});
+
+			// TODO: test if it calls the init method
 		});
 
 		describe('#dispose static method', function() {

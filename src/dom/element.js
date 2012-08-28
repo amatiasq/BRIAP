@@ -1,4 +1,5 @@
 define(function(require) {
+	"use strict";
 
 	var tools = require('core/tools');
 	var Base = require('core/base');
@@ -139,7 +140,7 @@ define(function(require) {
 				this.removeClass(name);
 			else
 				this.addClass(name);
-			return !has
+			return !has;
 		}
 
 	});

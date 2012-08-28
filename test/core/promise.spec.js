@@ -13,7 +13,7 @@ define(function(require) {
 		var spy, sut, future, schedule;
 
 		function createPromise() {
-			return Promise.create({ schedule: schedule });
+			return Promise.createWithDependencies({ schedule: schedule });
 		}
 
 		function resetSut() {

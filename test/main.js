@@ -76,6 +76,9 @@ require([ 'mocha' ], function() {
 
 		/// LEVEL 4 ///
 		'test/dom/element.spec',
+
+		/// LEVEL 5 ///
+		'test/ui/widget.spec',
 	], function() {
 
 		if (profile)

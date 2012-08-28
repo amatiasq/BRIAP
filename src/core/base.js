@@ -22,6 +22,7 @@ define(function(require) {
 
 	require('SystemInternals');
 	var _ = require('Underscore');
+	var tools = require('core/tools');
 
 
 	function dummy() { };
@@ -34,7 +35,7 @@ define(function(require) {
 			var result = method.apply(this, arguments);
 			this.base = original;
 			return result;
-		}
+		};
 	}
 
 	function inject(proto, config) {
@@ -69,12 +70,20 @@ define(function(require) {
 			_.useBase(proto, config);
 		}
 
+		var deps = [null];
+
 		var Type = proto.type = {
 
 			name: name,
 			extend: extend,
 
 			create: function create() {
+				var obj = new ctor;
+				obj.init.apply(obj, deps.concat(tools.args(arguments)));
+				return obj;
+			},
+
+			createWithDependencies: function createWithDependencies() {
 				var obj = new ctor;
 				obj.init.apply(obj, arguments);
 				return obj;
