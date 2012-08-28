@@ -2,6 +2,7 @@ define(function(require) {
 
 	var tools = require('core/tools');
 	var Base = require('core/base');
+	var whitespace = /[\r\n\t]/g;
 
 	function slashToUpper(name) {
 		var words = name.split('-');
@@ -11,21 +12,24 @@ define(function(require) {
 		}).join('');
 	}
 
+	function normalizeClass(el) {
+		return (' ' + el.className + ' ').replace(whitespace, ' ');
+	}
+
 	return Base.extend({
 
 		name: 'Element',
+		tag: 'div',
 
-		init: function(deps) {
+		init: function(deps, dom) {
 			this.base(deps);
-			this._el = (deps && deps.dom) || document.createElement('div');
-			this._el.setAttribute('data-element-id', this.$$hash);
+			this._el = dom || document.createElement(this.tag);
 		},
 
 		dispose: function() {
-			if (this.isOnDomThree())
+			if (this.isOnDomTree())
 				throw new Error('Cannot dispose a element attatched at the DOM');
 
-			this._el.removeAttribute('data-element-id');
 			this._el = null;
 			this.base();
 		},
@@ -35,9 +39,9 @@ define(function(require) {
 		},
 
 
-		//////////
-		// TREE //
-		//////////
+		//////////////
+		// DOM TREE //
+		//////////////
 
 		add: function(child) {
 			this._el.appendChild(child.dom());
@@ -51,6 +55,16 @@ define(function(require) {
 		//	removeFromParent, exclude, selfRemove...
 		deattach: function() {
 			this._el.parentNode.removeChild(this._el);
+		},
+
+		isOnDomTree: function() {
+			var current = this._el;
+			while(current.parentNode) {
+				current = current.parentNode;
+				if (current === window)
+					return true;
+			}
+			return false;
 		},
 
 
@@ -79,6 +93,12 @@ define(function(require) {
 		// STYLES //
 		////////////
 
+		setStyles: function(map) {
+			tools.each(map, function(value, key) {
+				this.setStyle(key, value);
+			}, this);
+		},
+
 		setStyle: function(key, value) {
 			this._el.style[slashToUpper(key)] = value;
 		},
@@ -93,6 +113,34 @@ define(function(require) {
 
 		removeStyle: function(key) {
 			delete this._el.style[slashToUpper(key)];
+		},
+
+
+		/////////////
+		// CLASSES //
+		/////////////
+
+		hasClass: function(name) {
+			return normalizeClass(this._el).indexOf(' ' + name + ' ') !== -1;
+		},
+
+		addClass: function(name) {
+			if (!this.hasClass(name))
+				this._el.className += ' ' + name;
+		},
+
+		removeClass: function(name) {
+			this._el.className = normalizeClass(this._el).replace(' ' + name, '').trim();
+		},
+
+		toogleClass: function(name) {
+			var has = this.hasClass(name);
+			if (has)
+				this.removeClass(name);
+			else
+				this.addClass(name);
+			return !has
 		}
+
 	});
 });
