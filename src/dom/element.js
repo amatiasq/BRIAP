@@ -3,6 +3,7 @@ define(function(require) {
 
 	var tools = require('core/tools');
 	var Base = require('core/base');
+	var Emitter = require('core/emitter');
 	var whitespace = /[\r\n\t]/g;
 
 	function slashToUpper(name) {
@@ -24,6 +25,7 @@ define(function(require) {
 
 		init: function(deps, dom) {
 			this.base(deps);
+			this._emitter = (deps && deps.emitter) || Emitter.create();
 			this._el = dom || document.createElement(this.tag);
 		},
 
@@ -141,7 +143,23 @@ define(function(require) {
 			else
 				this.addClass(name);
 			return !has;
-		}
+		},
 
+
+		////////////
+		// EVENTS //
+		////////////
+
+		on: function(event, handler, scope) {
+			this._emitter.on.call(this._emitter, event, handler, scope);
+			this._nativeLister(event);
+		},
+
+		_nativeListener: function(event) {
+			if (this._listeners[event])
+				return;
+
+			this._el.addLi
+		}
 	});
 });
