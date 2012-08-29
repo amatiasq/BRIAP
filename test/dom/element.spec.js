@@ -13,6 +13,9 @@ define(function(require) {
 			getAttribute: empty,
 			removeAttribute: empty,
 
+			addEventListener: empty,
+			removeEventListener: empty,
+
 			appendChild: empty,
 			removeChild: empty,
 
@@ -217,6 +220,19 @@ define(function(require) {
 					sut.toogleClass(sampleClass);
 					expect(sut.hasClass(sampleClass)).toBeFalse();
 				})
+			});
+		});
+
+		xdescribe('Events behaviour', function() {
+
+			describe('#on method', function() {
+				it('should add a listener to the dom if its the first time this event is added', function() {
+					var mock = sinon.mock(sut.dom());
+					mock.expects('addEventListener').once().withArgs('click');
+
+					sut.on('click', function() { });
+					mock.verify();
+				});
 			});
 		});
 	}

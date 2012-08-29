@@ -22,7 +22,6 @@ define(function() {
 		natives = [],
 		nativeCheck = [];
 
-	addNative(null, 'Null');
 	addNative(Boolean, 'Boolean');
 	addNative(Number, 'Number');
 	addNative(String, 'String');
@@ -35,13 +34,12 @@ define(function() {
 		if (typeof type === 'function' && value instanceof type)
 			return true;
 
-		var nativeIndex = natives.indexOf(type);
-		if (nativeIndex !== -1) {
-			if (type === null && value === undefined)
-				return true;
+		if (type === null)
+			return value === null || value === undefined;
 
+		var nativeIndex = natives.indexOf(type);
+		if (nativeIndex !== -1)
 			return nativeCheck[nativeIndex](value);
-		}
 
 		if (typeof type.isTypeOf === 'function')
 			return type.isTypeOf(value);

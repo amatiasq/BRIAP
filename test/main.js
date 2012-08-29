@@ -1,7 +1,7 @@
 // This is key!
 
 var profile = false;
-var coverage = false;
+var coverage = true;
 
 require.config({
 	baseUrl: coverage ? '../src-cov' : '../src',
@@ -29,7 +29,7 @@ require.config({
 			deps: [ 'SystemInternals', 'test/core/lang.spec' ]
 		},
 		'core/lang': {
-			deps: [ 'Polyfill' ]
+			deps: [ 'Polyfill', 'core/polyfill' ]
 		},
 
 		'mocha': {
@@ -75,14 +75,22 @@ require([ 'mocha' ], function() {
 		'test/core/promise.spec',
 
 		/// LEVEL 4 ///
+		'test/dom/event.spec',
+		'test/dom/events_helper.spec',
 		'test/dom/element.spec',
 
 		/// LEVEL 5 ///
-		'test/ui/widget.spec',
+		//'test/ui/widget.spec',
 	], function() {
 
 		if (profile)
 			console.profile("Testing..." + Date.now())
+
+		if (document.all)
+		beforeEach(function(done) {
+			setTimeout(done, 0);
+		});
+
 		mocha.run(function() {
 			if (profile)
 				console.profileEnd();

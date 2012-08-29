@@ -4,6 +4,7 @@ interface Emitter extends Base {
 	void on(String signal, void handler(args...), Object scope);
 	void off(String signal, void handler(args...), Object scope);
 	void emit(String signal);
+	int listenersCount();
 }
 
 */

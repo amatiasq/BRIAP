@@ -4,6 +4,7 @@ define(function(require) {
 	var tools = require('core/tools');
 	var Base = require('core/base');
 	var Emitter = require('core/emitter');
+	var EventsHelper = require('dom/events_helper');
 	var whitespace = /[\r\n\t]/g;
 
 	function slashToUpper(name) {
@@ -27,12 +28,15 @@ define(function(require) {
 			this.base(deps);
 			this._emitter = (deps && deps.emitter) || Emitter.create();
 			this._el = dom || document.createElement(this.tag);
+			this._listening = {};
 		},
 
 		dispose: function() {
 			if (this.isOnDomTree())
 				throw new Error('Cannot dispose a element attatched at the DOM');
 
+			this._emitter.dispose();
+			this._listening = null;
 			this._el = null;
 			this.base();
 		},
@@ -151,15 +155,17 @@ define(function(require) {
 		////////////
 
 		on: function(event, handler, scope) {
+			this._nativeListener(event);
 			this._emitter.on.call(this._emitter, event, handler, scope);
-			this._nativeLister(event);
 		},
 
 		_nativeListener: function(event) {
-			if (this._listeners[event])
-				return;
+			if (!this._emitter.listenersCount(event))
+				EventsHelper.addListener(this._el, event, this._onEvent);
+		},
 
-			this._el.addLi
+		_onEvent: function(event) {
+			this._emitter.emit(event.getType(), event);
 		}
 	});
 });

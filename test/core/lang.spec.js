@@ -90,6 +90,12 @@ define(function(require) {
 			});
 
 			describe('with native types', function() {
+				/*
+				var cosa = arguments.callee;
+				var i = 0;
+				while (cosa = cosa.caller) i++;
+				console.log("Call stack til now " + i);
+				*/
 				eachValidValue(function(type, value) {
 					it('should return true when type is ' + (type && type.name) + ' and value is ' + value, function() {
 						expect(Lang.is(value, type)).toBeTrue();
