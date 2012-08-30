@@ -223,7 +223,7 @@ define(function(require) {
 			});
 		});
 
-		xdescribe('Events behaviour', function() {
+		describe('Events behaviour', function() {
 
 			describe('#on method', function() {
 				it('should add a listener to the dom if its the first time this event is added', function() {
@@ -231,6 +231,36 @@ define(function(require) {
 					mock.expects('addEventListener').once().withArgs('click');
 
 					sut.on('click', function() { });
+					mock.verify();
+				});
+
+				it('should add it only the first time', function() {
+					var mock = sinon.mock(sut.dom());
+					mock.expects('addEventListener').once().withArgs('click');
+					sut.on('click', function() { });
+					sut.on('click', function() { });
+					mock.verify();
+				});
+			});
+
+			describe('#off method', function() {
+				function handler() { }
+				beforeEach(function() {
+					sut.on('click', handler);
+				});
+
+				it('should remove the listener of the dom if the element has no other listeners', function() {
+					var mock = sinon.mock(sut.dom());
+					mock.expects('removeEventListener').once().withArgs('click');
+					sut.off('click', handler);
+					mock.verify();
+				});
+
+				it('should not remove the listener if the element has more listeners on this event', function() {
+					sut.on('click', function() { });
+					var mock = sinon.mock(sut.dom());
+					mock.expects('removeEventListener').never();
+					sut.off('click', handler);
 					mock.verify();
 				});
 			});

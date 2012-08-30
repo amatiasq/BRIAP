@@ -62,6 +62,13 @@ define(function(require) {
 				expect(spy2).called.once();
 			});
 
+			it('should not add the same handler if I try', function() {
+				sut.on(sampleEvent, spy, scope);
+				emit();
+				expect(sut.listenersCount(sampleEvent)).toBe(1);
+				expect(spy).called.once();
+			});
+
 			describe('... and emit it...', function() {
 
 				beforeEach(resetSpy);

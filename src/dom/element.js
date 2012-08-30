@@ -26,6 +26,7 @@ define(function(require) {
 
 		init: function(deps, dom) {
 			this.base(deps);
+			this._onEvent = this._onEvent.bind(this);
 			this._emitter = (deps && deps.emitter) || Emitter.create();
 			this._el = dom || document.createElement(this.tag);
 			this._listening = {};
@@ -133,7 +134,7 @@ define(function(require) {
 
 		addClass: function(name) {
 			if (!this.hasClass(name))
-				this._el.className += ' ' + name;
+				this._el.className = (this._el.className + ' ' + name).trim();
 		},
 
 		removeClass: function(name) {
@@ -155,13 +156,31 @@ define(function(require) {
 		////////////
 
 		on: function(event, handler, scope) {
+			this._emitter.on(event, handler, scope);
 			this._nativeListener(event);
-			this._emitter.on.call(this._emitter, event, handler, scope);
+		},
+
+		off: function(event, handler, scope) {
+			this._emitter.off(event, handler, scope);
+			this._nativeListener(event);
 		},
 
 		_nativeListener: function(event) {
-			if (!this._emitter.listenersCount(event))
+			var listening = this._listening;
+
+			if (this._emitter.listenersCount(event)) {
+				if (listening[event])
+					return;
+
+				listening[event] = true;
 				EventsHelper.addListener(this._el, event, this._onEvent);
+			} else {
+				if (!listening[event])
+					return;
+
+				listening[event] = false;
+				EventsHelper.removeListener(this._el, event, this._onEvent);
+			}
 		},
 
 		_onEvent: function(event) {

@@ -1,6 +1,7 @@
 define(function(require) {
 
 	var Base = require('core/base');
+	var Element = require('dom/element');
 
 	return Base.extend({
 
@@ -8,7 +9,10 @@ define(function(require) {
 
 		init: function(deps) {
 			this.base(deps);
+		},
+
+		dispose: function() {
+			this.base();
 		}
 	});
-
 });

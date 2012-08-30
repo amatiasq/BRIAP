@@ -1,7 +1,7 @@
 // This is key!
 
 var profile = false;
-var coverage = true;
+var coverage = false;
 
 require.config({
 	baseUrl: coverage ? '../src-cov' : '../src',
@@ -80,7 +80,7 @@ require([ 'mocha' ], function() {
 		'test/dom/element.spec',
 
 		/// LEVEL 5 ///
-		//'test/ui/widget.spec',
+		'test/ui/widget.spec',
 	], function() {
 
 		if (profile)

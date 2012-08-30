@@ -14,15 +14,15 @@ define(function(require) {
 		element.addEventListener(event, createEvent(handler), true);
 	}
 
-	function addListener_ATTACH() {
+	function addListener_ATTACH(element, event, handler) {
 		element.attachEvent('on' + event, createEvent(handler));
 	}
 
-	function removeListener_STANDARD() {
+	function removeListener_STANDARD(element, event, handler) {
 		element.removeEventListener(event, createEvent(handler), true);
 	}
 
-	function removeListener_ATTACH() {
+	function removeListener_ATTACH(element, event, handler) {
 		element.detachEvent(event, createEvent(handler), true);
 	}
 

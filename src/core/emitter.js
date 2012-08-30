@@ -15,6 +15,15 @@ define(function(require) {
 	var args = require('core/tools').args;
 	var Base = require('core/base');
 
+	function equals(handler, scope, expected) {
+		return function(item) {
+			return (
+				item.funct === handler &&
+				item.scope === scope
+			) === expected;
+		};
+	}
+
 	return Base.extend({
 
 		name: 'Emitter',
@@ -35,10 +44,15 @@ define(function(require) {
 		},
 
 		on: function on(signal, handler, scope) {
-			if (!this._listeners[signal])
-				this._listeners[signal] = [];
+			var list = this._listeners;
 
-			this._listeners[signal].push({
+			if (!list[signal])
+				list[signal] = [];
+
+			if (list[signal].some(equals(handler, scope, true)))
+				return;
+
+			list[signal].push({
 				funct: handler,
 				scope: scope
 			});
@@ -49,12 +63,7 @@ define(function(require) {
 			if (!list)
 				return;
 
-			this._listeners[signal] = list.filter(function(item) {
-				return (
-					item.funct !== handler ||
-					item.scope !== scope
-				);
-			});
+			this._listeners[signal] = list.filter(equals(handler, scope, false));
 		},
 
 		emit: function emit(signal) {
