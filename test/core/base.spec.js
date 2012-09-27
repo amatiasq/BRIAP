@@ -31,6 +31,8 @@ define(function(require) {
 			// TODO: test if it calls the init method
 		});
 
+		// TODO: Test 'create with dependencies'
+
 		describe('#dispose static method', function() {
 
 			beforeEach(resetSut);

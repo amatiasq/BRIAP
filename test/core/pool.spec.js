@@ -33,6 +33,7 @@ define(function(require) {
 				var called = false;
 				SampleClass.include({
 					init:function() {
+						this.base();
 						this.initialized = true;
 						called = true;
 					}
@@ -48,13 +49,21 @@ define(function(require) {
 				var arg1 = 1;
 				var arg2 = function() {};
 				var arg3 = {};
+				var received = [];
 
-				var mock = sinon.mock(SampleClass.getProto());
-				mock.expects('init').once().withExactArgs(null, arg1, arg2, arg3);
+				SampleClass.include({
+					init:function(a, b, c, d) {
+						this.base();
+						received.push(a, b, c, d);
+					}
+				});
 
 				sut.create(arg1, arg2, arg3);
 
-				mock.verify();
+				expect(received[0]).toBe(null);
+				expect(received[1]).toBe(arg1);
+				expect(received[2]).toBe(arg2);
+				expect(received[3]).toBe(arg3);
 			});
 		});
 
@@ -72,6 +81,7 @@ define(function(require) {
 				var called = false;
 				SampleClass.include({
 					init:function() {
+						this.base();
 						this.initialized = true;
 						called = true;
 					}
@@ -88,13 +98,21 @@ define(function(require) {
 				var arg1 = 1;
 				var arg2 = function() {};
 				var arg3 = {};
+				var received = [];
 
-				var mock = sinon.mock(SampleClass.getProto());
-				mock.expects('init').once().withExactArgs(deps, arg1, arg2, arg3);
+				SampleClass.include({
+					init:function(a, b, c, d) {
+						this.base();
+						received.push(a, b, c, d);
+					}
+				});
 
 				sut.createWithDependencies(deps, arg1, arg2, arg3);
 
-				mock.verify();
+				expect(received[0]).toBe(deps);
+				expect(received[1]).toBe(arg1);
+				expect(received[2]).toBe(arg2);
+				expect(received[3]).toBe(arg3);
 			});
 		});
 

@@ -27,7 +27,7 @@ define(function(require) {
 
 	function dummy() { };
 
-	function useBase(method, parent, name) {
+	function useBase(method, parent) {
 		return function base() {
 			var result, original = this.base;
 			this.base = parent;
@@ -41,20 +41,62 @@ define(function(require) {
 	function inject(proto, config) {
 		_.each(config, function(value, name) {
 			if (typeof value === 'function' && proto[name]) {
-				proto[name] = useBase(value, proto[name], name);
+				proto[name] = useBase(value, proto[name]);
 			} else {
 				proto[name] = value;
 			}
 		});
 	}
 
+	var count = 0;
+	var BasePrototype = {
+		name: 'Base',
+
+		init: function init(dependencies) {
+			this.$$hash = count++;
+			this.$$alive = true;
+		},
+
+		dispose: function dispose() {
+			if (!this.$$alive)
+				return;
+
+			this.$$alive = false;
+			var props = [];
+
+			for (var i in this) {
+				if (i === 'type')
+					continue;
+
+				if (this[i] &&
+					this[i].dispose &&
+					this[i].$$alive)
+					throw new Error(this.toString() + ' has not disposed its property ' + i);
+
+				props.push(i);
+			}
+
+			this.type.destruct(this, props);
+		},
+
+		toString: function toString() {
+			return this.type.toString() + '{ hash: ' + this.$$hash + ' }';
+		}
+
+	};
+
 	_.mixin({ useBase: inject });
 	_.mixin({ extendNative: function(native, config) {
-		return extend.call({
+		var BaseNative = extend.call({
 			getProto: function() {
 				return new native;
-			}
-		}, config);
+			},
+		}, BasePrototype);
+
+		if (config)
+			BaseNative.include(config);
+
+		return BaseNative;
 	}})
 
 
@@ -72,21 +114,27 @@ define(function(require) {
 
 		var deps = [null];
 
+		function construct() {
+			var obj = new ctor;
+			obj.init.apply(obj, arguments);
+
+			if (!obj.$$alive)
+				throw new Error('Call parent init, stupid! (' + name + ')');
+
+			return obj;
+		}
+
 		var Type = proto.type = {
 
 			name: name,
 			extend: extend,
 
 			create: function create() {
-				var obj = new ctor;
-				obj.init.apply(obj, deps.concat(tools.args(arguments)));
-				return obj;
+				construct(deps.concat(tools.args(arguments)));
 			},
 
 			createWithDependencies: function createWithDependencies() {
-				var obj = new ctor;
-				obj.init.apply(obj, arguments);
-				return obj;
+				construct(arguments);
 			},
 
 			destruct: function destruct(obj, props) {
@@ -123,43 +171,5 @@ define(function(require) {
 		return Type;
 	}
 
-
-	var count = 0;
-
-	return _.extendNative(Object, {
-
-		name: 'Base',
-
-		init: function init(dependencies) {
-			this.$$hash = count++;
-			this.$$alive = true;
-		},
-
-		dispose: function dispose() {
-			if (!this.$$alive)
-				return;
-
-			this.$$alive = false;
-			var props = [];
-
-			for (var i in this) {
-				if (i === 'type')
-					continue;
-
-				if (this[i] &&
-					this[i].dispose &&
-					this[i].$$alive)
-					throw new Error(this.toString() + ' has not disposed its property ' + i);
-
-				props.push(i);
-			}
-
-			this.type.destruct(this, props);
-		},
-
-		toString: function toString() {
-			return this.type.toString() + '{ hash: ' + this.$$hash + ' }';
-		}
-
-	});
+	return _.extendNative(Object);
 });
