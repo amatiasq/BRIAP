@@ -10,6 +10,18 @@ define(function(require) {
 
 		BaseSpec(Pool);
 
+		describe('Instances should pass Base specifications', function() {
+			var sut = Pool.create(Base.extend());
+
+			beforeEach(function() {
+				sut.reset();
+			});
+
+			BaseSpec(sut);
+		});
+
+
+
 		var sut;
 		var SampleClass;
 		var instance;
@@ -150,6 +162,15 @@ define(function(require) {
 				expect(sut.create()).toBe(instance3);
 				expect(sut.create()).toBe(instance2);
 				expect(sut.create()).toBe(instance1);
+			});
+		});
+
+		describe('#reset method', function() {
+			it('should clear pool cache so the pool must return a new instance', function() {
+				var instance1 = sut.create();
+				instance1.dispose();
+				sut.reset();
+				expect(sut.create()).not.toBe(instance1);
 			});
 		});
 	});

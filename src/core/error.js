@@ -1,4 +1,5 @@
 define(function(require) {
+	"use strict";
 
 	var _ = require('Underscore');
 	require('core/base');

@@ -50,12 +50,20 @@ define(function(require) {
 			this._stack.push(obj);
 		},
 
+		reset: function() {
+			this._stack.length = 0;
+		},
+
 		getProto: function() {
 			return this._Type.getProto();
 		},
 
 		isTypeOf: function(target) {
 			return this._Type.isTypeOf(target);
+		},
+
+		extend: function(config) {
+			return this._Type.extend(config);
 		},
 
 		include: function(config) {

@@ -114,9 +114,9 @@ define(function(require) {
 
 		var deps = [null];
 
-		function construct() {
+		function construct(args) {
 			var obj = new ctor;
-			obj.init.apply(obj, arguments);
+			obj.init.apply(obj, args);
 
 			if (!obj.$$alive)
 				throw new Error('Call parent init, stupid! (' + name + ')');
@@ -130,11 +130,11 @@ define(function(require) {
 			extend: extend,
 
 			create: function create() {
-				construct(deps.concat(tools.args(arguments)));
+				return construct(deps.concat(tools.args(arguments)));
 			},
 
 			createWithDependencies: function createWithDependencies() {
-				construct(arguments);
+				return construct(arguments);
 			},
 
 			destruct: function destruct(obj, props) {
