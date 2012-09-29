@@ -6,6 +6,7 @@ define(function(require) {
 	var Emitter = require('core/emitter');
 	var EventsHelper = require('dom/events_helper');
 	var whitespace = /[\r\n\t]/g;
+	var wrapper = '__wrapper__';
 
 	function slashToUpper(name) {
 		var words = name.split('-');
@@ -19,17 +20,18 @@ define(function(require) {
 		return (' ' + el.className + ' ').replace(whitespace, ' ');
 	}
 
-	return Base.extend({
+	var Element = Base.extend({
 
 		name: 'Element',
 		tag: 'div',
 
 		init: function(deps, dom) {
 			this.base(deps);
+			this._listening = {};
 			this._onEvent = this._onEvent.bind(this);
 			this._emitter = (deps && deps.emitter) || Emitter.create();
 			this._el = dom || document.createElement(this.tag);
-			this._listening = {};
+			this._el[wrapper] = this;
 		},
 
 		dispose: function() {
@@ -38,6 +40,7 @@ define(function(require) {
 
 			this._emitter.dispose();
 			this._listening = null;
+			this._el.wrapper = null;
 			this._el = null;
 			this.base();
 		},
@@ -187,4 +190,20 @@ define(function(require) {
 			this._emitter.emit(event.getType(), event);
 		}
 	});
+
+	var originalCreate = Element.create;
+	Element.create = function(dom) {
+		if (dom && dom[wrapper])
+			return dom[wrapper];
+		return originalCreate.call(this, dom);
+	};
+
+	var originalCreateWithDependencies = Element.createWithDependencies;
+	Element.createWithDependencies = function(deps, dom) {
+		if (dom && dom[wrapper])
+			return dom[wrapper];
+		return originalCreateWithDependencies.call(this, deps, dom);
+	};
+
+	return Element;
 });

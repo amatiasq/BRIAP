@@ -10,16 +10,21 @@ define(function(require) {
 
 		init: function(deps) {
 			this.base(deps);
-
+			this._root = Element.create();
 		},
 
 		dispose: function() {
+			this._root.dispose();
+			this._root = null;
 			this.base();
 		},
 
+		getContainer: function() {
+			return this._root;
+		},
+
 		render: function(parent) {
-			var dom = Lang.is(parent, Element) ? parent.dom() : parent;
-			dom.appendChild(this._base.dom());
+			parent.add(this._root);
 		}
 	});
 });

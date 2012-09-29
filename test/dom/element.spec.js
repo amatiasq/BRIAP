@@ -53,6 +53,30 @@ define(function(require) {
 			other = createSut();
 		});
 
+		describe('Creation behaviour', function() {
+			describe('When we invoke it without arguments', function() {
+				it('should return a wrapper of a new dom element', function() {
+					var sut = Type.create();
+					expect(sut.dom()).toBeInstanceOf(HTMLElement);
+				});
+			});
+
+			describe('When we invoke it with a dom element', function() {
+				var dom = document.createElement('div');
+
+				it('should return a wrapper of this dom element', function() {
+					var sut = Type.create(dom);
+					expect(sut.dom()).toBe(dom);
+				});
+
+				it('should return the same wrapper for the same dom element each time I ask for it', function() {
+					var first = Type.create(dom);
+					var second = Type.create(dom);
+					expect(first).toBe(second);
+				});
+			});
+		});
+
 		describe('Dom tree behaviour', function() {
 			it('should delegate #add method into elements #appendChild method', function() {
 				testDelegate(sut, 'add', [other], sut.dom(), 'appendChild', [other.dom()]);
