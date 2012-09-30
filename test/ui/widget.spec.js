@@ -9,25 +9,34 @@ define(function(require) {
 
 		BaseSpec(Type);
 
-		var sut;
+		var sut, element;
 		beforeEach(function() {
 			sut = Type.create();
+			element = sut.getContainer();
 		});
 
 		describe('#getContainer method', function() {
 			it('should return a element representing the full widget', function() {
-				var container = sut.getContainer();
-				expect(Lang.is(container, Element)).toBeTrue();
+				expect(Lang.is(element, Element)).toBeTrue();
 			});
 		});
 
 		describe('#render method', function() {
 			it('should append a element to the element passed as argument', function() {
-				var child = sut.getContainer();
 				var parent = Element.create();
 
 				var mock = sinon.mock(parent);
-				mock.expects('add').once().withExactArgs(child);
+				mock.expects('add').once().withExactArgs(element);
+
+				sut.render(parent);
+				mock.verify();
+			});
+
+			it('should append a element to the passed widget\'s container', function() {
+				var parent = Widget.create();
+
+				var mock = sinon.mock(parent.getContainer());
+				mock.expects('add').once().withExactArgs(element);
 
 				sut.render(parent);
 				mock.verify();

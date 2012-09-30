@@ -2,11 +2,14 @@ define(function(require) {
 	"use strict";
 
 	var tools = require('core/tools');
+	var Lang = require('core/lang');
 	var Base = require('core/base');
+	
 	var Emitter = require('core/emitter');
 	var EventsHelper = require('dom/events_helper');
+
+	var wrapper = Lang.hiddenKey('wrapper');
 	var whitespace = /[\r\n\t]/g;
-	var wrapper = '__wrapper__';
 
 	function slashToUpper(name) {
 		var words = name.split('-');

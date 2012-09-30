@@ -47,7 +47,21 @@ define(function() {
 		return false;
 	}
 
+
+	var keys = [];
+	function hiddenKey(identifier) {
+		var key = 'h-' + identifier + '-' + Math.random();
+
+		if (keys.indexOf(key) !== -1)
+			return hiddenKey(identifier);
+
+		keys.push(key);
+		return key;
+	}
+
+
 	return {
+		hiddenKey: hiddenKey,
 		is: is
 	};
 });

@@ -4,7 +4,7 @@ define(function(require) {
 	var Base = require('core/base');
 	var Element = require('dom/element');
 
-	return Base.extend({
+	var Widget = Base.extend({
 
 		name: 'Widget',
 
@@ -24,7 +24,12 @@ define(function(require) {
 		},
 
 		render: function(parent) {
+			if (Lang.is(parent, Widget))
+				parent = parent.getContainer();
+
 			parent.add(this._root);
 		}
 	});
+
+	return Widget;
 });
