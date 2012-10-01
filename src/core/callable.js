@@ -10,6 +10,7 @@ define(function(require) {
 	"use strict";
 
 	var inject = require('Underscore').useBase;
+	var tools = require('core/tools');
 	var Base = require('core/base');
 
 	function dummy() { }
@@ -53,7 +54,7 @@ define(function(require) {
 				}
 
 				callable.__flag = flag;
-				callable.init.apply(callable, arguments);
+				callable.init.apply(callable, [null].concat(tools.args(arguments)));
 				return callable;
 			},
 

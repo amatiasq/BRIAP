@@ -28,6 +28,25 @@ define(function(require) {
 				expect(sut.$$alive).toBeTrue();
 			});
 
+			it('should pass null as the first argument to init method', function() {
+				var arg;
+
+				Type.extend({
+					init: function(deps) {
+						this.base(deps);
+						arg = deps;
+					}
+				}).create();
+
+				expect(arg).toBeNull();
+			});
+
+			xit('should pass every given argument after the dependencies', function() {
+				var args = [ {}, 3, "asdf" ];
+				//var 
+				var recived;
+			});
+
 			// TODO: test if it calls the init method
 		});
 
